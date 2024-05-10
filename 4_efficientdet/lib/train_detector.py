@@ -110,8 +110,8 @@ class Detector():
             else:
                 os.environ["CUDA_VISIBLE_DEVICES"] = ','.join([str(id) for id in self.system_dict["params"]["gpu_devices"]])
             self.system_dict["local"]["device"] = 'cuda' if torch.cuda.is_available() else 'cpu'
-            print(self.system_dict["local"]["device"]);
             efficientdet = efficientdet.to(self.system_dict["local"]["device"])
+            efficientdet= torch.nn.DataParallel(efficientdet).to(self.system_dict["local"]["device"])
 
         self.system_dict["local"]["model"] = efficientdet;
         self.system_dict["local"]["model"].train();
@@ -151,7 +151,6 @@ class Detector():
         if(self.system_dict["dataset"]["val"]["status"]):
             
             for epoch in range(self.system_dict["params"]["num_epochs"]):
-                self.system_dict["local"]["model"].to(self.system_dict["local"]["device"])
                 self.system_dict["local"]["model"].train()
 
                 epoch_loss = []
@@ -254,7 +253,6 @@ class Detector():
 
         else:
             for epoch in range(self.system_dict["params"]["num_epochs"]):
-                self.system_dict["local"]["model"].to(self.system_dict["local"]["device"])
                 self.system_dict["local"]["model"].train()
 
                 epoch_loss = []
@@ -298,14 +296,17 @@ class Detector():
                 dummy_input = torch.rand(1, 3, 512, 512)
                 if torch.cuda.is_available():
                     dummy_input = dummy_input.to(self.system_dict["local"]["device"])
-                    print("Test")
                 if isinstance(self.system_dict["local"]["model"], nn.DataParallel):
                     self.system_dict["local"]["model"].module.backbone_net.model.set_swish(memory_efficient=False)
-                    torch.onnx.export(self.system_dict["local"]["model"].module, dummy_input,
-                                      os.path.join(self.system_dict["output"]["saved_path"], "signatrix_efficientdet_coco.onnx"),
-                                      verbose=False,
-                                      opset_version=11)
 
+                    try:
+                        torch.onnx.export(self.system_dict["local"]["model"].module, dummy_input,
+                                          os.path.join(self.system_dict["output"]["saved_path"], "signatrix_efficientdet_coco.onnx"),
+                                          verbose=False,
+                                          opset_version=11)
+                    except:
+                        print('faild onnx export')
+                        continue
                     self.system_dict["local"]["model"].module.backbone_net.model.set_swish(memory_efficient=True)
                 else:
                     self.system_dict["local"]["model"].backbone_net.model.set_swish(memory_efficient=False)
