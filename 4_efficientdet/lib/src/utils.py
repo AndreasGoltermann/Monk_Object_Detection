@@ -52,8 +52,6 @@ class ClipBoxes(nn.Module):
         super(ClipBoxes, self).__init__()
 
     def forward(self, boxes, img):
-        print(img)
-        img.to("cuda")
         batch_size, num_channels, height, width = img.shape
         print(width.item())
         boxes[:, :, 0] = torch.clamp(boxes[:, :, 0], min=0)
