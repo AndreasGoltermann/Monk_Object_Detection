@@ -151,6 +151,7 @@ class Detector():
         if(self.system_dict["dataset"]["val"]["status"]):
             
             for epoch in range(self.system_dict["params"]["num_epochs"]):
+                self.system_dict["local"]["model"].to(self.system_dict["local"]["device"])
                 self.system_dict["local"]["model"].train()
 
                 epoch_loss = []
@@ -253,6 +254,7 @@ class Detector():
 
         else:
             for epoch in range(self.system_dict["params"]["num_epochs"]):
+                self.system_dict["local"]["model"].to(self.system_dict["local"]["device"])
                 self.system_dict["local"]["model"].train()
 
                 epoch_loss = []
