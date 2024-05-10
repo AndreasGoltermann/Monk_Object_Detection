@@ -58,7 +58,7 @@ class ClipBoxes(nn.Module):
         boxes[:, :, 1] = torch.clamp(boxes[:, :, 1], min=0)
 
         boxes[:, :, 2] = torch.clamp(boxes[:, :, 2], max=width.item())
-        boxes[:, :, 3] = torch.clamp(boxes[:, :, 3], max=height)
+        boxes[:, :, 3] = torch.clamp(boxes[:, :, 3], max=height.item())
 
         return boxes
 
