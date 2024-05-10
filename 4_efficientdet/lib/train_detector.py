@@ -128,7 +128,7 @@ class Detector():
                                                                     self.system_dict["params"]["lr"]);
 
         self.system_dict["local"]["scheduler"] = torch.optim.lr_scheduler.ReduceLROnPlateau(self.system_dict["local"]["optimizer"], 
-                                                                    patience=3, verbose=True)
+                                                                    patience=3)
 
 
     def Train(self, num_epochs=2, model_output_dir="trained/"):
