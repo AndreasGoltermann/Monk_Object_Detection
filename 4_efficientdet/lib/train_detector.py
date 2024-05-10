@@ -110,6 +110,7 @@ class Detector():
             else:
                 os.environ["CUDA_VISIBLE_DEVICES"] = ','.join([str(id) for id in self.system_dict["params"]["gpu_devices"]])
             self.system_dict["local"]["device"] = 'cuda' if torch.cuda.is_available() else 'cpu'
+            print(self.system_dict["local"]["device"]);
             efficientdet = efficientdet.to(self.system_dict["local"]["device"])
             efficientdet= torch.nn.DataParallel(efficientdet).to(self.system_dict["local"]["device"])
 
