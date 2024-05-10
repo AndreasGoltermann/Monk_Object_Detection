@@ -248,12 +248,20 @@ class EfficientDet(nn.Module):
                 m.eval()
 
     def forward(self, inputs):
-        if inputs.shape[0] == 2:
-            is_training = True
-            img_batch, annotations = inputs
-        else:
-            is_training = False
-            img_batch = inputs
+        try:
+            if len(inputs) == 2:
+                is_training = True
+                img_batch, annotations = inputs
+            else:
+                is_training = False
+                img_batch = inputs
+        except:
+            if inputs.shape[0] == 2:
+                is_training = True
+                img_batch, annotations = inputs
+            else:
+                is_training = False
+                img_batch = inputs
 
         c3, c4, c5 = self.backbone_net(img_batch)
         p3 = self.conv3(c3)
