@@ -297,6 +297,7 @@ class Detector():
                 dummy_input = torch.rand(1, 3, 512, 512)
                 if torch.cuda.is_available():
                     dummy_input = dummy_input.to(self.system_dict["local"]["device"])
+                    print("Test")
                 if isinstance(self.system_dict["local"]["model"], nn.DataParallel):
                     self.system_dict["local"]["model"].module.backbone_net.model.set_swish(memory_efficient=False)
 
