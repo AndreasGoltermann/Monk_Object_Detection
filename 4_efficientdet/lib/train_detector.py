@@ -112,7 +112,6 @@ class Detector():
             self.system_dict["local"]["device"] = 'cuda' if torch.cuda.is_available() else 'cpu'
             print(self.system_dict["local"]["device"]);
             efficientdet = efficientdet.to(self.system_dict["local"]["device"])
-            efficientdet= torch.nn.DataParallel(efficientdet).to(self.system_dict["local"]["device"])
 
         self.system_dict["local"]["model"] = efficientdet;
         self.system_dict["local"]["model"].train();
